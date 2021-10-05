@@ -135,4 +135,10 @@ Por ejemplo si consultamos por el id 1 , nos quedaria algo asi:
 }
 ```
 
+## Ejecución
+
+Se debe configurar la variable de entorno APP_ENV direccionando al archivo de propiedades. Por ejemplo:
+
+APP_ENV=C:\workspace\rymc\src\main\resources\rymc.properties
+
 
