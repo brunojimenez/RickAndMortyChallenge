@@ -142,3 +142,11 @@ Se debe configurar la variable de entorno APP_ENV direccionando al archivo de pr
 APP_ENV=C:\workspace\rymc\src\main\resources\rymc.properties
 
 
+Se debe iniciar la aplicación Springboot, luego con algún cliente REST (por ejemplo, Postman) hacer una solicitud. 
+En caso de levantarlo en el servidor local, la URL queda como la siguiente:
+
+```
+
+GET http://localhost:8889/rymc/api/rest/getCharacter/3
+
+```
