@@ -103,11 +103,24 @@ class RickAndMortyChallengeServiceTests {
 	}
 
 	@Test
-	void exceptionFlow() throws Exception {
+	void getSingleCharacterReturnNull() throws Exception {
 
 		assertThrows(ServiceException.class, () -> {
 			Mockito.when(rickAndMortyApi.getSingleCharacter(ArgumentMatchers.anyInt())).thenReturn(null);
 			Mockito.when(rickAndMortyApi.getSingleLocation(ArgumentMatchers.anyInt())).thenReturn(location);
+
+			Integer id = 1;
+			service.getCharacter(id);
+		});
+
+	}
+
+	@Test
+	void getSingleLocationReturnNull() throws Exception {
+
+		assertThrows(ServiceException.class, () -> {
+			Mockito.when(rickAndMortyApi.getSingleCharacter(ArgumentMatchers.anyInt())).thenReturn(character);
+			Mockito.when(rickAndMortyApi.getSingleLocation(ArgumentMatchers.anyInt())).thenReturn(null);
 
 			Integer id = 1;
 			service.getCharacter(id);
