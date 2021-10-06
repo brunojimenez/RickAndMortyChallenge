@@ -19,7 +19,7 @@ import cl.rymc.client.rym.to.Character;
 import cl.rymc.client.rym.to.CharacterLocation;
 import cl.rymc.client.rym.to.CharacterOrigin;
 import cl.rymc.client.rym.to.Location;
-import cl.rymc.exception.RickAndMortyChallengeServiceException;
+import cl.rymc.exception.ServiceException;
 import cl.rymc.service.RickAndMortyChallengeServiceImpl;
 import cl.rymc.service.to.CharacterResponse;
 
@@ -105,7 +105,7 @@ class RickAndMortyChallengeServiceTests {
 	@Test
 	void exceptionFlow() throws Exception {
 
-		assertThrows(RickAndMortyChallengeServiceException.class, () -> {
+		assertThrows(ServiceException.class, () -> {
 			Mockito.when(rickAndMortyApi.getSingleCharacter(ArgumentMatchers.anyInt())).thenReturn(null);
 			Mockito.when(rickAndMortyApi.getSingleLocation(ArgumentMatchers.anyInt())).thenReturn(location);
 

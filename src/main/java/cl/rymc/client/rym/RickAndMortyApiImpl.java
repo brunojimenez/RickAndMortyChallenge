@@ -1,6 +1,8 @@
 package cl.rymc.client.rym;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import cl.rymc.client.rym.exception.GetCharacterException;
 import cl.rymc.client.rym.exception.GetLocationException;
+import cl.rymc.client.rym.exception.ServiceStatus;
 import cl.rymc.client.rym.to.Character;
 import cl.rymc.client.rym.to.Location;
+import cl.rymc.service.to.SubError;
 
 /**
  * Implementacion de las operaciones a utilizar de Rick And Morty Api.
@@ -46,24 +49,27 @@ public class RickAndMortyApiImpl implements RickAndMortyApi {
 		try {
 			String propUrl = env.getProperty(API_LOCATION_URL_KEY);
 			URI url = URI.create(propUrl + id);
-			logger.info("[getSingleLocation] url={}", url.toString());
+			logger.info("[getSingleLocation] url={}", url);
 
 			Location response = restTemplate.getForObject(url, Location.class);
 
 			if (response == null) {
-				// TODO lanzar error por nulidad
-				throw new GetLocationException();
+				throw new GetLocationException(ServiceStatus.ERROR_RYM_CLIENT_LOCACION_NULA);
 			}
 
-			logger.info("[getSingleLocation] response={}", response.toString());
+			logger.info("[getSingleLocation] response={}", response);
 
 			return response;
-		} catch (HttpClientErrorException | HttpServerErrorException e) {
+		} catch (HttpClientErrorException e) {
 			logger.error("[getSingleLocation] Error", e);
-			throw new GetLocationException();
+			List<SubError> subErrors = new ArrayList<>();
+			subErrors.add(new SubError("ResponseBody", e.getResponseBodyAsString(), null));
+			throw new GetLocationException(ServiceStatus.ERROR_RYM_CLIENT_AL_CONSULTAR_LOCACION, subErrors);
 		} catch (Exception e) {
 			logger.error("[getSingleLocation] Error", e);
-			throw new GetLocationException();
+			List<SubError> subErrors = new ArrayList<>();
+			subErrors.add(new SubError("Message", e.getMessage(), null));
+			throw new GetLocationException(ServiceStatus.ERROR_RYM_CLIENT_AL_CONSULTAR_LOCACION_INESPERADO);
 		}
 
 	}
@@ -76,23 +82,26 @@ public class RickAndMortyApiImpl implements RickAndMortyApi {
 			String propUrl = env.getProperty(API_CHARACTER_URL_KEY);
 
 			URI url = URI.create(propUrl + id);
-			logger.info("[getSingleCharacter] url={}", url.toString());
+			logger.info("[getSingleCharacter] url={}", url);
 
 			Character response = restTemplate.getForObject(url, Character.class);
 
 			if (response == null) {
-				// TODO lanzar error por nulidad
-				throw new GetCharacterException();
+				throw new GetCharacterException(ServiceStatus.ERROR_RYM_CLIENT_CARACTER_NULO);
 			}
 
-			logger.info("[getSingleCharacter] response={}", response.toString());
+			logger.info("[getSingleCharacter] response={}", response);
 			return response;
-		} catch (HttpClientErrorException | HttpServerErrorException e) {
+		} catch (HttpClientErrorException e) {
 			logger.error("[getSingleCharacter] Error", e);
-			throw new GetCharacterException();
+			List<SubError> subErrors = new ArrayList<>();
+			subErrors.add(new SubError("ResponseBody", e.getResponseBodyAsString(), null));
+			throw new GetCharacterException(ServiceStatus.ERROR_RYM_CLIENT_AL_CONSULTAR_CARACTER, subErrors);
 		} catch (Exception e) {
 			logger.error("[getSingleCharacter] Error", e);
-			throw new GetCharacterException();
+			List<SubError> subErrors = new ArrayList<>();
+			subErrors.add(new SubError("ResponseBody", e.getMessage(), null));
+			throw new GetCharacterException(ServiceStatus.ERROR_RYM_CLIENT_AL_CONSULTAR_CARACTER_INESPERADO, subErrors);
 		}
 	}
 

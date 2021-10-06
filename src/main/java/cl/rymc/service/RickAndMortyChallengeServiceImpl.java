@@ -10,13 +10,14 @@ import org.springframework.stereotype.Service;
 import cl.rymc.client.rym.RickAndMortyApi;
 import cl.rymc.client.rym.exception.GetCharacterException;
 import cl.rymc.client.rym.exception.GetLocationException;
+import cl.rymc.client.rym.exception.ServiceStatus;
 import cl.rymc.client.rym.to.Character;
 import cl.rymc.client.rym.to.CharacterLocation;
 import cl.rymc.client.rym.to.Location;
-import cl.rymc.exception.RickAndMortyChallengeServiceException;
+import cl.rymc.exception.ServiceException;
 import cl.rymc.service.to.CharacterResponse;
-import cl.rymc.service.to.Mapper;
 import cl.rymc.service.to.Origin;
+import cl.rymc.service.util.Mapper;
 
 /**
  * Implementacion de las operaciones de negocio.
@@ -69,7 +70,7 @@ public class RickAndMortyChallengeServiceImpl implements RickAndMortyChallengeSe
 		} catch (GetCharacterException | GetLocationException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RickAndMortyChallengeServiceException();
+			throw new ServiceException(ServiceStatus.ERROR_INESPERADO);
 		}
 
 	}
@@ -80,16 +81,15 @@ public class RickAndMortyChallengeServiceImpl implements RickAndMortyChallengeSe
 	 * 
 	 * @param characterLocation
 	 * @return
-	 * @throws RickAndMortyChallengeServiceException
+	 * @throws ServiceException
 	 */
-	private Integer getLocationId(CharacterLocation characterLocation) throws RickAndMortyChallengeServiceException {
+	private Integer getLocationId(CharacterLocation characterLocation) throws ServiceException {
 
 		String locationUrl = characterLocation.getUrl();
 		String[] locationSplit = locationUrl.split("/");
 
 		if (locationSplit.length == 0) {
-			// TODO Lanzar excepcion por que no logró parcelar el ID de la locacion
-			throw new RickAndMortyChallengeServiceException();
+			throw new ServiceException(ServiceStatus.ERROR_AL_PARCELAR_ID_LOCACION);
 		}
 
 		// Obtiene el ID de la ubicacion

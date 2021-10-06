@@ -1,7 +1,9 @@
-package cl.rymc.service.to;
+package cl.rymc.service.util;
 
 import cl.rymc.client.rym.to.Character;
 import cl.rymc.client.rym.to.Location;
+import cl.rymc.service.to.CharacterResponse;
+import cl.rymc.service.to.Origin;
 
 /**
  * Clase que mapea atributos de un objeto a otro.

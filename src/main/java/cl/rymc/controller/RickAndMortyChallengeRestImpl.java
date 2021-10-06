@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.rymc.service.RickAndMortyChallengeService;
 import cl.rymc.service.to.CharacterResponse;
 
+/**
+ * Controlador REST.
+ * 
+ * @author Bruno Jimenez
+ */
 @RestController
 public class RickAndMortyChallengeRestImpl implements RickAndMortyChallengeRest {
 
